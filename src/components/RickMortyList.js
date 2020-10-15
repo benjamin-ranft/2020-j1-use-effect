@@ -16,12 +16,17 @@ export default function RickMortyList(){
         const characterIndexDecrement = () => {setCharacterIndex(characterIndex-1)};
         return [characterIndex, characterIndexIncrement, characterIndexDecrement];
     }
-    const [characterIndex, characterIndexIncrement, characterIndexDecrement]= useCharacterCounter(1);
-
-
+    const [characterIndex, characterIndexIncrement, characterIndexDecrement] =
+        useCharacterCounter(JSON.parse(localStorage.getItem("characterIndex")) || 1);
 
     useEffect(() => {
-            fetchData(1);
+        localStorage.setItem("characterIndex", JSON.stringify(characterIndex))
+    }, [characterIndex])
+
+
+    useEffect(()=>{
+        const index=JSON.parse(localStorage.getItem("characterIndex"));
+        index === null  ? fetchData(1) : fetchData(index);
         }
         ,[]);
 
