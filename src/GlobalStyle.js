@@ -1,4 +1,5 @@
 import {createGlobalStyle} from 'styled-components'
+import backgroundimage from "./images/zOrHWVE.jpg"
 
 export default createGlobalStyle`
   :root {
@@ -14,10 +15,12 @@ export default createGlobalStyle`
     font-size: 112.5%;
     margin: 0;
     font-family: sans-serif;
-    background: var(--nf-blue);
+    background-image: url("${backgroundimage}");
   }
 
   button {
     font-size: 1em;
   }
+  
+  
 `;
