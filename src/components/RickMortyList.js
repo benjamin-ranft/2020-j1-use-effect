@@ -1,6 +1,7 @@
 import React, {useEffect, useState } from "react";
 import axios from "axios";
 import Character from "./Character";
+import useCounter from "./hooks/useCounter";
 import styled from "styled-components/macro";
 
 
@@ -9,15 +10,11 @@ export default function RickMortyList(){
 
     const [isLoading, setIsLoading] = useState(false);
 
-
-    function useCharacterCounter(startIndex){
-        const [characterIndex, setCharacterIndex] = useState(startIndex);
-        const characterIndexIncrement = () => {setCharacterIndex(characterIndex +1)};
-        const characterIndexDecrement = () => {setCharacterIndex(characterIndex-1)};
-        return [characterIndex, characterIndexIncrement, characterIndexDecrement];
-    }
     const [characterIndex, characterIndexIncrement, characterIndexDecrement] =
-        useCharacterCounter(JSON.parse(localStorage.getItem("characterIndex")) || 1);
+        useCounter(JSON.parse(localStorage.getItem("characterIndex")) || 1);
+
+    const [characterCache,setCharacterCache]= useState([]);
+    function addToCharacterCache()
 
     useEffect(() => {
         localStorage.setItem("characterIndex", JSON.stringify(characterIndex))
@@ -40,10 +37,12 @@ export default function RickMortyList(){
 
 
     function fetchData(characterIndex){
+
         axios
             .get("https://rickandmortyapi.com/api/character/" + characterIndex)
             .then((response) => setRawData(response.data))
         setIsLoading(false);
+
 
     };
 
@@ -52,17 +51,19 @@ export default function RickMortyList(){
     return(
         <StyledRickMortyList>
             {rawData && <Character data={rawData}></Character>}
-            <button
-                disabled={characterIndex <= 1}
-                onClick={()=>{
-                characterIndexDecrement();
-                setIsLoading(true);
-            }}>{isLoading ? "is loading..." : "<<<"}</button>
-            #{characterIndex}
-            <button onClick={()=>{
-                characterIndexIncrement();
-                setIsLoading(true);
-            }}>{isLoading ? "is loading..." : ">>>"}</button>
+            <div>
+                <StyledButton
+                    disabled={characterIndex <= 1}
+                    onClick={()=>{
+                    characterIndexDecrement();
+                    setIsLoading(true);
+                    }}>{isLoading ? "is loading..." : "<<<"}</StyledButton>
+                #{characterIndex}
+                <StyledButton onClick={()=>{
+                    characterIndexIncrement();
+                    setIsLoading(true);
+                }}>{isLoading ? "is loading..." : ">>>"}</StyledButton>
+            </div>
         </StyledRickMortyList>
     )
 
@@ -72,4 +73,15 @@ const StyledRickMortyList = styled.div`
 background-color: white;
 border-radius: 10px;
 padding: 30px;
+
+`;
+
+const StyledButton = styled.button`
+padding: 5px 40px;
+color: white;
+background-image: url("./images/Screenshot 2020-10-15 at 16.20.31.png");
+font-weight: bold;
+border-radius: 5px;
+border-color: transparent;
+margin: 10px;
 `;
