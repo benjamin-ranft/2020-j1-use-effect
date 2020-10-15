@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from "styled-components/macro";
 
-export default function Counter({count,countUp,countDown}) {
+export default function Counter({tooLarge, tooSmall, count,countUp,countDown}) {
     return <StyledCounter>
         <h1>Count: {count}</h1>
         <div>
-            <button onClick={countDown}>count down</button>
-            <button onClick={countUp}>count up</button>
+            <button disabled ={ tooSmall} onClick={countDown}>count down</button>
+            <button disabled ={ tooLarge }onClick={countUp}>count up</button>
         </div>
     </StyledCounter>
 }

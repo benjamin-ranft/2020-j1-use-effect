@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import GlobalStyle from "./GlobalStyle";
 import Counter from "./components/Counter";
@@ -8,13 +8,28 @@ export default function App() {
     const countUp = () => setCount(count + 1);
     const countDown = () => setCount(count - 1);
 
+
+    useEffect(() => {
+        console.log("Main App rendered for the first time")
+    }, []);
+
+    useEffect(() => {
+        if (count !== 0) {
+            console.log("Count updated");
+        }
+        }, [count]);
+
+
     return (
       <>
         <GlobalStyle/>
         <Main>
-          <Counter count={count}
-                   countUp={countUp}
-                   countDown={countDown}/>
+                <Counter tooLarge ={ count >= 5}
+                         tooSmall = {count <= -5}
+                         count={count}
+                         countUp={countUp}
+                         countDown={countDown}/>
+            }
         </Main>
       </>
   );
