@@ -4,6 +4,8 @@ import Character from "./Character";
 import useCounter from "./hooks/useCounter";
 import styled from "styled-components/macro";
 
+//
+
 
 export default function RickMortyList(){
     const [rawData,setRawData] = useState([]);
@@ -14,7 +16,17 @@ export default function RickMortyList(){
         useCounter(JSON.parse(localStorage.getItem("characterIndex")) || 1);
 
     const [characterCache,setCharacterCache]= useState([]);
-    function addToCharacterCache()
+
+    function addToCharacterCache(data){
+        setCharacterCache([...characterCache,data])
+    }
+
+    function getFromCacheByIndex(index){
+        return rawData.find(entry=>{
+            return entry.id ===index;
+        })
+    }
+
 
     useEffect(() => {
         localStorage.setItem("characterIndex", JSON.stringify(characterIndex))
@@ -42,6 +54,7 @@ export default function RickMortyList(){
             .get("https://rickandmortyapi.com/api/character/" + characterIndex)
             .then((response) => setRawData(response.data))
         setIsLoading(false);
+        addToCharacterCache(rawData);
 
 
     };
